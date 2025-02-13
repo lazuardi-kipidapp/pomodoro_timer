@@ -20,6 +20,7 @@ class _TimerScreenState extends State<TimerScreen> {
   bool isRunning = false;
   Timer? timer;
   final NotificationService _notificationService = NotificationService();
+  String selectedMode = 'Work'; // Default mode
 
   @override
   void initState() {
@@ -59,6 +60,11 @@ class _TimerScreenState extends State<TimerScreen> {
     setState(() {
       timerModel.remainingTime = timerModel.isWorkSession ? timerModel.workDuration : timerModel.breakDuration;
     });
+  }
+
+  void _resetTodaySummary() {
+    SummaryController.resetDailySummary();
+    setState(() {});
   }
 
   void _switchSession() {
@@ -122,7 +128,38 @@ class _TimerScreenState extends State<TimerScreen> {
               onReset: _resetTimer,
             ),
             const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _resetTodaySummary,
+              child: const Text('Reset Today Summary'),
+            ),
+            const SizedBox(height: 20),
             Text('Today: ${dailySummary['sessions']} sessions, ${dailySummary['time']} min'),
+            const SizedBox(height: 20),
+            // Mode Selector
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Mode: '),
+                DropdownButton<String>(
+                  value: selectedMode,
+                  items: ['Work', 'Break'].map((String mode) {
+                    return DropdownMenuItem<String>(
+                      value: mode,
+                      child: Text(mode),
+                    );
+                  }).toList(),
+                  onChanged: (String? newMode) {
+                    setState(() {
+                      selectedMode = newMode!;
+                      timerModel.isWorkSession = selectedMode == 'Work';
+                      timerModel.remainingTime = timerModel.isWorkSession
+                          ? timerModel.workDuration
+                          : timerModel.breakDuration;
+                    });
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),

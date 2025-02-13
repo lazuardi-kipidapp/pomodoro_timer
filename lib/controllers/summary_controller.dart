@@ -41,14 +41,28 @@ class SummaryController {
     };
   }
 
+  static void resetDailySummary() {
+    _prefs.setInt('daily_sessions', 0);
+    _prefs.setInt('daily_time', 0);
+  }
+
+  static void resetWeeklySummary() {
+    _prefs.setInt('weekly_sessions', 0);
+    _prefs.setInt('weekly_time', 0);
+  }
+
+  static void resetAllSummary() {
+    resetDailySummary();
+    resetWeeklySummary();
+  }
+
   static void _checkAndResetDailySummary() {
     String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
     String lastUsedDate = _prefs.getString('last_used_date') ?? '';
 
     if (today != lastUsedDate) {
       _prefs.setString('last_used_date', today);
-      _prefs.setInt('daily_sessions', 0);
-      _prefs.setInt('daily_time', 0);
+      resetDailySummary();
     }
   }
 

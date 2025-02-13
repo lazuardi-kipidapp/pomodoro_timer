@@ -17,10 +17,11 @@ class PomodoroTimerApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const TimerScreen(),
+      home: TimerScreen(),
       routes: {
         '/summary': (context) => const SummaryScreen(),
       },
     );
   }
 }
+
