@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/utils/strings.dart';
@@ -25,7 +24,14 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   void initState() {
     super.initState();
-    timerModel = TimerModel(workDuration: 25 * 60, breakDuration: 5 * 60, remainingTime: 25 * 60, isWorkSession: true);
+    Map<String, int> settings = SummaryController.getTimerSettings();
+    timerModel = TimerModel(
+      workDuration: settings['work_duration']!,
+      breakDuration: settings['break_duration']!,
+      remainingTime: settings['work_duration']!,
+      isWorkSession: true,
+    );
+    _notificationService.initializeNotifications();
   }
 
   void _startTimer() {
@@ -36,7 +42,7 @@ class _TimerScreenState extends State<TimerScreen> {
       } else {
         _notificationService.showNotification(timerModel.isWorkSession);
         if (timerModel.isWorkSession) {
-          SummaryController.recordWorkSession(25);
+          SummaryController.recordWorkSession(timerModel.workDuration ~/ 60);
         }
         _switchSession();
       }
@@ -64,26 +70,26 @@ class _TimerScreenState extends State<TimerScreen> {
   }
 
   void _showCustomTimerDialog() async {
-  final result = await showDialog<Map<String, int>>(
-    context: context,
-    builder: (context) => CustomTimerDialog(
-      initialWorkDuration: timerModel.workDuration,
-      initialBreakDuration: timerModel.breakDuration,
-    ),
-  );
-
-  if (result != null) {
-    setState(() {
-      timerModel.workDuration = result['work']!;
-      timerModel.breakDuration = result['break']!;
-      timerModel.remainingTime = timerModel.isWorkSession ? timerModel.workDuration : timerModel.breakDuration;
-    });
+    final result = await showDialog<Map<String, int>>(
+      context: context,
+      builder: (context) => CustomTimerDialog(
+        initialWorkDuration: timerModel.workDuration,
+        initialBreakDuration: timerModel.breakDuration,
+      ),
+    );
+    if (result != null) {
+      setState(() {
+        timerModel.workDuration = result['work']!;
+        timerModel.breakDuration = result['break']!;
+        timerModel.remainingTime = timerModel.workDuration;
+      });
+      SummaryController.saveTimerSettings(timerModel.workDuration, timerModel.breakDuration);
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
-    final summary = SummaryController.getSummary();
+    Map<String, dynamic> dailySummary = SummaryController.getSummary()['daily']!;
     return Scaffold(
       appBar: AppBar(
         title: const Text(Strings.pomodoroTimerTitle),
@@ -103,16 +109,11 @@ class _TimerScreenState extends State<TimerScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-            timerModel.isWorkSession ? 'Work Session' : 'Break Session',
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue),
-          ),
-            Text(
-              'Today: ${summary['daily']?['sessions']} sessions, ${summary['daily']?['time']} minutes',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(height: 20),
             TimerDisplay(timeInSeconds: timerModel.remainingTime),
+            Text(
+              timerModel.isWorkSession ? 'Work Session' : 'Break Session',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 20),
             TimerButtons(
               isRunning: isRunning,
@@ -120,10 +121,11 @@ class _TimerScreenState extends State<TimerScreen> {
               onStop: _stopTimer,
               onReset: _resetTimer,
             ),
+            const SizedBox(height: 20),
+            Text('Today: ${dailySummary['sessions']} sessions, ${dailySummary['time']} min'),
           ],
         ),
       ),
     );
   }
 }
-
