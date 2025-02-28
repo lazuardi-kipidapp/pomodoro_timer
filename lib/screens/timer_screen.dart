@@ -67,13 +67,20 @@ class _TimerScreenState extends State<TimerScreen> {
     setState(() {});
   }
 
-  void _switchSession() {
-    _stopTimer();
-    setState(() {
-      timerModel.isWorkSession = !timerModel.isWorkSession;
-      timerModel.remainingTime = timerModel.isWorkSession ? timerModel.workDuration : timerModel.breakDuration;
-    });
-  }
+  void _changeMode(String newMode) {
+  setState(() {
+    selectedMode = newMode;
+    timerModel.isWorkSession = selectedMode == 'Work';
+    timerModel.remainingTime = timerModel.isWorkSession
+        ? timerModel.workDuration
+        : timerModel.breakDuration;
+  });
+}
+
+void _switchSession() {
+  _stopTimer();
+  _changeMode(timerModel.isWorkSession ? 'Break' : 'Work');
+}
 
   void _showCustomTimerDialog() async {
     final result = await showDialog<Map<String, int>>(
@@ -149,13 +156,9 @@ class _TimerScreenState extends State<TimerScreen> {
                     );
                   }).toList(),
                   onChanged: (String? newMode) {
-                    setState(() {
-                      selectedMode = newMode!;
-                      timerModel.isWorkSession = selectedMode == 'Work';
-                      timerModel.remainingTime = timerModel.isWorkSession
-                          ? timerModel.workDuration
-                          : timerModel.breakDuration;
-                    });
+                    if (newMode != null) {
+                    _changeMode(newMode);
+                  }
                   },
                 ),
               ],
