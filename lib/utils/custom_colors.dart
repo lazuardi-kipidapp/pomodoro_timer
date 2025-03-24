@@ -24,8 +24,8 @@ class CustomColors {
   static const Color strokeBlue = CustomColors.darkBlue100;
 
   // Navbars
-  static const Color navbarSelectedBG = CustomColors.lightPurple100;
-  static const Color navbarSelectedLabel = Colors.black;
+  static const Color navbarSelectedBG = CustomColors.darkPurple100;
+  static const Color navbarSelectedLabel = Colors.white;
   static const Color navbarSelectedHighlight = Colors.white;
   static const Color navbarUnselectedBG = CustomColors.darkPurple200;
   static const Color navbarUnselectedLabel = CustomColors.lightPurple100;

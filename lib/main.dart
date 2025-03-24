@@ -1,10 +1,12 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:pomodoro_timer/screens/main_screen.dart';
 import 'package:pomodoro_timer/screens/timer_screen.dart';
 import 'package:pomodoro_timer/screens/summary_screen.dart';
 import 'package:pomodoro_timer/controllers/summary_controller.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pomodoro_timer/services/notification_service.dart';
+import 'package:pomodoro_timer/utils/custom_colors.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -46,11 +48,19 @@ class PomodoroTimerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: TimerScreen(),
-      routes: {
-        '/summary': (context) => const SummaryScreen(),
-      },
+      theme: ThemeData(
+        scaffoldBackgroundColor: CustomColors.backgroundBlue,
+        primarySwatch: Colors.blue,
+        fontFamily: 'Nunito',
+        textTheme: TextTheme(
+          labelMedium: TextStyle(fontSize: 22,fontWeight: FontWeight.w800),
+          labelSmall: TextStyle(fontSize: 16,fontWeight: FontWeight.w700),
+          displayLarge: TextStyle(fontSize: 48,fontWeight: FontWeight.w700),
+          displayMedium: TextStyle(fontSize: 36,fontWeight: FontWeight.w700),
+          displaySmall: TextStyle(fontSize: 22,fontWeight: FontWeight.w700),
+        ),
+      ),
+      home: MainScreen(),
     );
   }
 }
