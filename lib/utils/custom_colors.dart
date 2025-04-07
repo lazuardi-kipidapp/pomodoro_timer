@@ -20,6 +20,10 @@ class CustomColors {
   static const Color tagBlueBG = CustomColors.darkBlue100;
   static const Color tagBlueLabel = Colors.black;
 
+  // Buttons
+  static const Color buttonPurpleBG = CustomColors.darkPurple200;
+  static const Color buttonPurpleLabel = Colors.white;
+
   // Strokes
   static const Color strokeBlue = CustomColors.darkBlue100;
 
