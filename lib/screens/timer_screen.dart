@@ -1,170 +1,107 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:pomodoro_timer/utils/strings.dart';
-import 'package:pomodoro_timer/models/timer_model.dart';
-import 'package:pomodoro_timer/services/notification_service.dart';
-import 'package:pomodoro_timer/controllers/summary_controller.dart';
-import 'package:pomodoro_timer/widgets/timer_display.dart';
-import 'package:pomodoro_timer/widgets/timer_buttons.dart';
-import 'package:pomodoro_timer/widgets/custom_timer_dialog.dart';
+import 'package:pomodoro_timer/utils/custom_colors.dart';
+import 'package:pomodoro_timer/widgets/summary_card_group.dart';
+import 'package:pomodoro_timer/widgets/timer_navpills.dart';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({super.key});
 
   @override
-  _TimerScreenState createState() => _TimerScreenState();
+  State<TimerScreen> createState() => _TimerScreenState();
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-  late TimerModel timerModel;
-  bool isRunning = false;
-  Timer? timer;
-  final NotificationService _notificationService = NotificationService();
-  String selectedMode = 'Work'; // Default mode
-
-  @override
-  void initState() {
-    super.initState();
-    Map<String, int> settings = SummaryController.getTimerSettings();
-    timerModel = TimerModel(
-      workDuration: settings['work_duration']!,
-      breakDuration: settings['break_duration']!,
-      remainingTime: settings['work_duration']!,
-      isWorkSession: true,
-    );
-    _notificationService.initializeNotifications();
-  }
-
-  void _startTimer() {
-    setState(() => isRunning = true);
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (timerModel.remainingTime > 0) {
-        setState(() => timerModel.remainingTime--);
-      } else {
-        _notificationService.showNotification(timerModel.isWorkSession);
-        if (timerModel.isWorkSession) {
-          SummaryController.recordWorkSession(timerModel.workDuration ~/ 60);
-        }
-        _switchSession();
-      }
-    });
-  }
-
-  void _stopTimer() {
-    setState(() => isRunning = false);
-    timer?.cancel();
-  }
-
-  void _resetTimer() {
-    _stopTimer();
-    setState(() {
-      timerModel.remainingTime = timerModel.isWorkSession ? timerModel.workDuration : timerModel.breakDuration;
-    });
-  }
-
-  void _resetTodaySummary() {
-    SummaryController.resetDailySummary();
-    setState(() {});
-  }
-
-  void _changeMode(String newMode) {
-  setState(() {
-    selectedMode = newMode;
-    timerModel.isWorkSession = selectedMode == 'Work';
-    timerModel.remainingTime = timerModel.isWorkSession
-        ? timerModel.workDuration
-        : timerModel.breakDuration;
-  });
-}
-
-void _switchSession() {
-  _stopTimer();
-  _changeMode(timerModel.isWorkSession ? 'Break' : 'Work');
-}
-
-  void _showCustomTimerDialog() async {
-    final result = await showDialog<Map<String, int>>(
-      context: context,
-      builder: (context) => CustomTimerDialog(
-        initialWorkDuration: timerModel.workDuration,
-        initialBreakDuration: timerModel.breakDuration,
-      ),
-    );
-    if (result != null) {
-      setState(() {
-        timerModel.workDuration = result['work']!;
-        timerModel.breakDuration = result['break']!;
-        timerModel.remainingTime = timerModel.workDuration;
-      });
-      SummaryController.saveTimerSettings(timerModel.workDuration, timerModel.breakDuration);
-    }
-  }
+  bool isWorkMode = true;
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> dailySummary = SummaryController.getSummary()['daily']!;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(Strings.pomodoroTimerTitle),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.bar_chart),
-            onPressed: () => Navigator.pushNamed(context, '/summary'),
-          ),
-          IconButton(
-            icon: const Icon(Icons.timer),
-            onPressed: _showCustomTimerDialog,
-          ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TimerDisplay(timeInSeconds: timerModel.remainingTime),
-            Text(
-              timerModel.isWorkSession ? 'Work Session' : 'Break Session',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            TimerButtons(
-              isRunning: isRunning,
-              onStart: _startTimer,
-              onStop: _stopTimer,
-              onReset: _resetTimer,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _resetTodaySummary,
-              child: const Text('Reset Today Summary'),
-            ),
-            const SizedBox(height: 20),
-            Text('Today: ${dailySummary['sessions']} sessions, ${dailySummary['time']} min'),
-            const SizedBox(height: 20),
-            // Mode Selector
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Mode: '),
-                DropdownButton<String>(
-                  value: selectedMode,
-                  items: ['Work', 'Break'].map((String mode) {
-                    return DropdownMenuItem<String>(
-                      value: mode,
-                      child: Text(mode),
-                    );
-                  }).toList(),
-                  onChanged: (String? newMode) {
-                    if (newMode != null) {
-                    _changeMode(newMode);
-                  }
-                  },
+      backgroundColor: CustomColors.backgroundBlue,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+
+              // Mode Switcher
+              NavPills(
+                isWorkMode: isWorkMode,
+                onTap: (bool value) {
+                  setState(() {
+                    isWorkMode = value;
+                    // ubah mode dan state lainnya
+                  });
+                },
+              ),
+          
+              const SizedBox(height: 30),
+          
+              // Circular Timer Display
+              Center(
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      width: 220,
+                      height: 220,
+                      child: CircularProgressIndicator(
+                        value: 0.5,
+                        strokeWidth: 12,
+                        backgroundColor: CustomColors.progressPurpleBG,
+                        valueColor: const AlwaysStoppedAnimation(CustomColors.progressPurpleValue),
+                      ),
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text("25:00", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.settings),
+                          color: CustomColors.buttonPurpleBG,
+                        )
+                      ],
+                    )
+                  ],
                 ),
-              ],
-            ),
-          ],
+              ),
+          
+              const SizedBox(height: 30),
+          
+              // Control Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildControlButton(Icons.play_arrow, "Start", () {}),
+                  const SizedBox(width: 20),
+                  _buildControlButton(Icons.pause, "Pause", () {}),
+                  const SizedBox(width: 20),
+                  _buildControlButton(Icons.stop, "Reset", () {}),
+                ],
+              ),
+          
+              const SizedBox(height: 36),
+          
+              // Today Summary Card Group
+              const SummaryCardGroup('daily'),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildControlButton(IconData icon, String label, VoidCallback onTap) {
+    return ElevatedButton.icon(
+      onPressed: onTap,
+      icon: Icon(icon),
+      label: Text(label),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: CustomColors.buttonPurpleBG,
+        foregroundColor: CustomColors.buttonPurpleLabel,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       ),
     );
   }

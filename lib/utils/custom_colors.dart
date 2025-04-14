@@ -27,6 +27,10 @@ class CustomColors {
   // Strokes
   static const Color strokeBlue = CustomColors.darkBlue100;
 
+  //  Progress Indicators
+  static const Color progressPurpleValue = CustomColors.darkPurple100;
+  static const Color progressPurpleBG = CustomColors.lightGray100;
+
   // Navbars
   static const Color navbarSelectedBG = CustomColors.darkPurple100;
   static const Color navbarSelectedLabel = Colors.white;
