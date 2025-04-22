@@ -98,9 +98,15 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
     );
   }
 
-  String _formatDuration(int minutes) {
-    final d = Duration(minutes: minutes);
+  String _formatDuration(int time) {
+    final d = Duration(seconds: time);
     String twoDigits(int n) => n.toString().padLeft(2, '0');
-    return '${d.inHours}:${twoDigits(d.inMinutes.remainder(60))}';
+
+    final hours = twoDigits(d.inHours);
+    final mins = twoDigits(d.inMinutes.remainder(60));
+    final secs = twoDigits(d.inSeconds.remainder(60));
+
+    return '$hours:$mins:$secs';
   }
+
 }
