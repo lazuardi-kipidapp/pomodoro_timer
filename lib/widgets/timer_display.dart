@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/utils/custom_colors.dart';
+import 'package:pomodoro_timer/utils/time_utils.dart';
 
 class TimerDisplay extends StatefulWidget {
   final int timeInSeconds;
@@ -35,16 +36,6 @@ class _TimerDisplayState extends State<TimerDisplay> {
     _currentProgress = 1 - (widget.timeInSeconds / widget.totalDuration);
   }
 
-  String _formatTime(int seconds) {
-    final hours = seconds ~/ 3600;
-    final minutes = (seconds % 3600) ~/ 60;
-    final remainingSeconds = seconds % 60;
-
-    return '${hours.toString().padLeft(2, '0')}:'
-          '${minutes.toString().padLeft(2, '0')}:'
-          '${remainingSeconds.toString().padLeft(2, '0')}';
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +61,7 @@ class _TimerDisplayState extends State<TimerDisplay> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                _formatTime(widget.timeInSeconds),
+                TimeUtils.formatDurationFromSeconds(widget.timeInSeconds),
                 style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
               ),
               IconButton(

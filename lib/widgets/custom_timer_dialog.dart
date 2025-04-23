@@ -1,5 +1,5 @@
-// File: custom_timer_dialog.dart
 import 'package:flutter/material.dart';
+import 'package:pomodoro_timer/utils/utils.dart';
 
 class CustomTimerDialog extends StatefulWidget {
   final int initialWorkDuration;
@@ -23,10 +23,10 @@ class _CustomTimerDialogState extends State<CustomTimerDialog> {
   void initState() {
     super.initState();
     _workController = TextEditingController(
-      text: (widget.initialWorkDuration ~/ 60).toString(),
+      text: TimeUtils.formatDurationFromSeconds(widget.initialWorkDuration),
     );
     _breakController = TextEditingController(
-      text: (widget.initialBreakDuration ~/ 60).toString(),
+      text: TimeUtils.formatDurationFromSeconds(widget.initialBreakDuration),
     );
   }
 
@@ -39,15 +39,15 @@ class _CustomTimerDialogState extends State<CustomTimerDialog> {
 
   void _setPreset(int workMinutes, int breakMinutes) {
     setState(() {
-      _workController.text = workMinutes.toString();
-      _breakController.text = breakMinutes.toString();
+      _workController.text = TimeUtils.formatDurationFromSeconds(workMinutes * 60);
+      _breakController.text = TimeUtils.formatDurationFromSeconds(breakMinutes * 60);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Set Custom Timer'),
+      title: const Text('Set Custom Timer (HH:MM:SS)'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -69,15 +69,23 @@ class _CustomTimerDialogState extends State<CustomTimerDialog> {
             ],
           ),
           const SizedBox(height: 20),
-          TextField(
+          TextFormField(
+            inputFormatters: [InputUtils.hhmmss],
             controller: _workController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: 'Work Duration (minutes)'),
+            keyboardType: TextInputType.datetime,
+            decoration: const InputDecoration(labelText: 'Work Duration (HH:MM:SS)'),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (value) {
+              if (!InputUtils.isValidHHMMSS(value ?? '')) {
+                return 'Format waktu harus HH:MM:SS dan dalam rentang yang benar';
+              }
+              return null;
+            },
           ),
           TextField(
             controller: _breakController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: 'Break Duration (minutes)'),
+            keyboardType: TextInputType.datetime,
+            decoration: const InputDecoration(labelText: 'Break Duration (HH:MM:SS)'),
           ),
         ],
       ),
@@ -88,9 +96,12 @@ class _CustomTimerDialogState extends State<CustomTimerDialog> {
         ),
         TextButton(
           onPressed: () {
-            int workDuration = int.tryParse(_workController.text) ?? 25;
-            int breakDuration = int.tryParse(_breakController.text) ?? 5;
-            Navigator.pop(context, {'work': workDuration * 60, 'break': breakDuration * 60});
+            final workDuration = TimeUtils.parseHHMMSS(_workController.text);
+            final breakDuration = TimeUtils.parseHHMMSS(_breakController.text);
+            Navigator.pop(context, {
+              'work': workDuration,
+              'break': breakDuration,
+            });
           },
           child: const Text('Set Timer'),
         ),

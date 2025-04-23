@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/controllers/summary_controller.dart';
 import 'package:pomodoro_timer/utils/custom_colors.dart';
+import 'package:pomodoro_timer/utils/time_utils.dart';
 
 class SummaryCardGroup extends StatefulWidget {
   final String type; // 'daily' or 'weekly'
@@ -56,7 +57,7 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildInfoBox('${data['sessions']}', 'Session'),
-            _buildInfoBox(_formatDuration(data['time']), 'Duration'),
+            _buildInfoBox(TimeUtils.formatDurationFromSeconds(data['time']), 'Duration'),
           ],
         ),
         const SizedBox(height: 12),
@@ -96,17 +97,6 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
       icon: const Icon(Icons.refresh),
       label: Text(label),
     );
-  }
-
-  String _formatDuration(int time) {
-    final d = Duration(seconds: time);
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-
-    final hours = twoDigits(d.inHours);
-    final mins = twoDigits(d.inMinutes.remainder(60));
-    final secs = twoDigits(d.inSeconds.remainder(60));
-
-    return '$hours:$mins:$secs';
   }
 
 }
