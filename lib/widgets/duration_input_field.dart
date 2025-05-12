@@ -49,14 +49,13 @@ void initState() {
 
     // ✅ Sinkronisasi internal state masker
     _maskFormatter.formatEditUpdate(
-      const TextEditingValue(),
-      initialValue,
-    );
-  } else {
-    widget.controller.text = _placeholder;
+        const TextEditingValue(),
+        initialValue,
+      );
+    } else {
+      widget.controller.text = _placeholder;
+    }
   }
-}
-
 
 
   void _onChanged(String _) {
