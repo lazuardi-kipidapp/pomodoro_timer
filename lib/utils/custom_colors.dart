@@ -9,6 +9,7 @@ class CustomColors {
   static const Color darkBlue100 = Color(0xFFA5D3F2);
   static const Color darkPurple100 = Color(0xFF5A3370);
   static const Color darkPurple200 = Color(0xFF3E224D);
+  static const Color darkGray100 = Color(0xFF5A5A5A);
 
   // Backgrounds
   static const Color backgroundBlue = CustomColors.lightBlue100;
@@ -23,6 +24,12 @@ class CustomColors {
   // Buttons
   static const Color buttonPurpleBG = CustomColors.darkPurple200;
   static const Color buttonPurpleLabel = Colors.white;
+  static const Color buttonGrayBG = CustomColors.darkGray100;
+  static const Color buttonGrayLabel = Colors.white;
+
+  // Inputs
+  static const Color inputFocused = CustomColors.darkPurple100;
+  static const Color inputEnabled = CustomColors.darkBlue100;
 
   // Strokes
   static const Color strokeBlue = CustomColors.darkBlue100;
