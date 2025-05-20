@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/controllers/summary_controller.dart';
-import 'package:pomodoro_timer/utils/custom_colors.dart';
+import 'package:pomodoro_timer/theme/app_colors.dart';
 import 'package:pomodoro_timer/utils/time_utils.dart';
 
 class SummaryCardGroup extends StatefulWidget {
@@ -47,7 +47,7 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
         Container(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
           decoration: BoxDecoration(
-            color: CustomColors.tagBlueBG,
+            color: AppColors.tagBlueBG,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -71,7 +71,7 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
       width: 130,
       height: 80,
       decoration: BoxDecoration(
-        border: Border.all(color: CustomColors.strokeBlue),
+        border: Border.all(color: AppColors.strokeBlue),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -88,8 +88,8 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
   Widget _buildResetButton(String label, VoidCallback onPressed) {
     return ElevatedButton.icon(
       style: ElevatedButton.styleFrom(
-        backgroundColor: CustomColors.buttonPurpleBG,
-        foregroundColor: CustomColors.buttonPurpleLabel,
+        backgroundColor: AppColors.buttonPurpleBG,
+        foregroundColor: AppColors.buttonPurpleLabel,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       ),

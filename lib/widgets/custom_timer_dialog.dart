@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomodoro_timer/utils/custom_colors.dart';
+import 'package:pomodoro_timer/theme/app_colors.dart';
 import 'package:pomodoro_timer/utils/utils.dart';
 import 'package:pomodoro_timer/widgets/duration_input_field.dart';
 
@@ -43,7 +43,7 @@ class _CustomTimerDialogState extends State<CustomTimerDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: CustomColors.backgroundBlue,
+      backgroundColor: AppColors.backgroundBlue,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -86,8 +86,8 @@ class _CustomTimerDialogState extends State<CustomTimerDialog> {
                         child: ElevatedButton(
                           onPressed: () => Navigator.pop(context, null),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: CustomColors.buttonGrayBG,
-                            foregroundColor: CustomColors.buttonGrayLabel,
+                            backgroundColor: AppColors.buttonGrayBG,
+                            foregroundColor: AppColors.buttonGrayLabel,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                           child: Text("Cancel"),
@@ -107,8 +107,8 @@ class _CustomTimerDialogState extends State<CustomTimerDialog> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: CustomColors.buttonPurpleBG, // warna ungu gelap
-                            foregroundColor: CustomColors.buttonPurpleLabel,
+                            backgroundColor: AppColors.buttonPurpleBG, // warna ungu gelap
+                            foregroundColor: AppColors.buttonPurpleLabel,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           ),
                           child: Text("Set"),
@@ -137,8 +137,8 @@ class _CustomTimerDialogState extends State<CustomTimerDialog> {
       child: ElevatedButton(
         onPressed: callBack,
         style: ElevatedButton.styleFrom(
-          backgroundColor: CustomColors.buttonPurpleBG, // warna ungu gelap
-          foregroundColor: CustomColors.buttonPurpleLabel,
+          backgroundColor: AppColors.buttonPurpleBG, // warna ungu gelap
+          foregroundColor: AppColors.buttonPurpleLabel,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),

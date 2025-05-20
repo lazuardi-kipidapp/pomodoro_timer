@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/screens/timer_screen.dart';
 import 'package:pomodoro_timer/screens/summary_screen.dart';
-import 'package:pomodoro_timer/utils/custom_colors.dart';
+import 'package:pomodoro_timer/theme/app_colors.dart';
+import 'package:pomodoro_timer/theme/app_text_styles.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -32,8 +33,8 @@ class _MainScreenState extends State<MainScreen> {
     return Expanded(
       child: Material(
         color: _selectedIndex == index 
-          ? CustomColors.navbarSelectedBG 
-          : CustomColors.navbarUnselectedBG,
+          ? AppColors.navbarSelectedBG 
+          : AppColors.navbarUnselectedBG,
         child: InkWell(
           onTap: () => _onItemTapped(index),
           splashColor: Colors.white10,
@@ -54,19 +55,17 @@ class _MainScreenState extends State<MainScreen> {
                       icon,
                       size: 24,
                       color: _selectedIndex == index
-                          ? CustomColors.navbarSelectedLabel
-                          : CustomColors.navbarUnselectedLabel,
+                          ? AppColors.navbarSelectedLabel
+                          : AppColors.navbarUnselectedLabel,
                     ),
                   ),
                 ),
                 Text(
                   label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w800,
+                  style: AppTextStyles.navItem.copyWith(
                     color: _selectedIndex == index
-                        ? CustomColors.navbarSelectedLabel
-                        : CustomColors.navbarUnselectedLabel,
+                        ? AppColors.navbarSelectedLabel
+                        : AppColors.navbarUnselectedLabel,
                   ),
                 ),
                 SizedBox(height: 5),
@@ -123,7 +122,7 @@ class _MainScreenState extends State<MainScreen> {
                 left: (MediaQuery.of(context).size.width / 2) * _selectedIndex,
               ), // Geser highlight ke posisi yang dipilih
               decoration: BoxDecoration(
-                color: CustomColors.navbarSelectedHighlight
+                color: AppColors.navbarSelectedHighlight
               ),
             ),
           ),

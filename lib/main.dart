@@ -6,7 +6,7 @@ import 'package:pomodoro_timer/screens/summary_screen.dart';
 import 'package:pomodoro_timer/controllers/summary_controller.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pomodoro_timer/services/notification_service.dart';
-import 'package:pomodoro_timer/utils/custom_colors.dart';
+import 'package:pomodoro_timer/theme/app_colors.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -49,7 +49,7 @@ class PomodoroTimerApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: CustomColors.backgroundBlue,
+        scaffoldBackgroundColor: AppColors.backgroundBlue,
         primarySwatch: Colors.blue,
         fontFamily: 'Nunito',
         textTheme: TextTheme(

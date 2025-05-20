@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomodoro_timer/utils/strings.dart';
+import 'package:pomodoro_timer/constants/strings.dart';
 
 class TimerButtons extends StatelessWidget {
   final bool isRunning;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomColors {
+class AppColors {
   // Pallates
   static const Color lightBlue100 = Color(0xFFCAEDFF);
   static const Color lightPurple100 = Color(0xFFD8B4F8);
@@ -12,37 +12,37 @@ class CustomColors {
   static const Color darkGray100 = Color(0xFF5A5A5A);
 
   // Backgrounds
-  static const Color backgroundBlue = CustomColors.lightBlue100;
+  static const Color backgroundBlue = AppColors.lightBlue100;
 
   // Texts
   static const Color textRegular = Colors.black;
 
   // Tags
-  static const Color tagBlueBG = CustomColors.darkBlue100;
+  static const Color tagBlueBG = AppColors.darkBlue100;
   static const Color tagBlueLabel = Colors.black;
 
   // Buttons
-  static const Color buttonPurpleBG = CustomColors.darkPurple200;
+  static const Color buttonPurpleBG = AppColors.darkPurple200;
   static const Color buttonPurpleLabel = Colors.white;
-  static const Color buttonGrayBG = CustomColors.darkGray100;
+  static const Color buttonGrayBG = AppColors.darkGray100;
   static const Color buttonGrayLabel = Colors.white;
 
   // Inputs
-  static const Color inputFocused = CustomColors.darkPurple100;
-  static const Color inputEnabled = CustomColors.darkBlue100;
+  static const Color inputFocused = AppColors.darkPurple100;
+  static const Color inputEnabled = AppColors.darkBlue100;
 
   // Strokes
-  static const Color strokeBlue = CustomColors.darkBlue100;
+  static const Color strokeBlue = AppColors.darkBlue100;
 
   //  Progress Indicators
-  static const Color progressPurpleValue = CustomColors.darkPurple100;
-  static const Color progressPurpleBG = CustomColors.lightGray100;
+  static const Color progressPurpleValue = AppColors.darkPurple100;
+  static const Color progressPurpleBG = AppColors.lightGray100;
 
   // Navbars
-  static const Color navbarSelectedBG = CustomColors.darkPurple100;
+  static const Color navbarSelectedBG = AppColors.darkPurple100;
   static const Color navbarSelectedLabel = Colors.white;
   static const Color navbarSelectedHighlight = Colors.white;
-  static const Color navbarUnselectedBG = CustomColors.darkPurple200;
-  static const Color navbarUnselectedLabel = CustomColors.lightPurple100;
+  static const Color navbarUnselectedBG = AppColors.darkPurple200;
+  static const Color navbarUnselectedLabel = AppColors.lightPurple100;
   static const Color navbarUnselectedHighlight = Colors.transparent;
 }

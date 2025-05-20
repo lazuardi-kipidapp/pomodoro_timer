@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:pomodoro_timer/utils/custom_colors.dart';
+import 'package:pomodoro_timer/theme/app_colors.dart';
 
 class DurationInputField extends StatefulWidget {
   final TextEditingController controller;
@@ -96,10 +96,10 @@ void initState() {
         labelText: widget.label,
         hintText: widget.hintText,
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: CustomColors.inputEnabled, width: 1.5),
+          borderSide: BorderSide(color: AppColors.inputEnabled, width: 1.5),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: CustomColors.inputFocused, width: 2),
+          borderSide: BorderSide(color: AppColors.inputFocused, width: 2),
         ),
       ),
       onChanged: _onChanged,

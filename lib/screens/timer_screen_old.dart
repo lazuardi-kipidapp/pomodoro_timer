@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:pomodoro_timer/utils/strings.dart';
+import 'package:pomodoro_timer/constants/strings.dart';
 import 'package:pomodoro_timer/models/timer_model.dart';
 import 'package:pomodoro_timer/services/notification_service.dart';
 import 'package:pomodoro_timer/controllers/summary_controller.dart';

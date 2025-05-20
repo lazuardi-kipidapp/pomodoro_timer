@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pomodoro_timer/utils/custom_colors.dart';
+import 'package:pomodoro_timer/theme/app_colors.dart';
+import 'package:pomodoro_timer/theme/app_text_styles.dart';
 
 class NavPills extends StatelessWidget {
   final bool isWorkMode;
@@ -30,7 +31,7 @@ class NavPills extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  color: selected ? CustomColors.navbarSelectedBG : CustomColors.navbarUnselectedBG,
+                  color: selected ? AppColors.navbarSelectedBG : AppColors.navbarUnselectedBG,
                   borderRadius: BorderRadius.horizontal(
                     left: Radius.circular(index == 0 ? 30 : 0),
                     right: Radius.circular(index == 1 ? 30 : 0),
@@ -39,10 +40,10 @@ class NavPills extends StatelessWidget {
                 child: Center(
                   child: Text(
                     label,
-                    style: TextStyle(
-                      color: selected ? CustomColors.navbarSelectedLabel : CustomColors.navbarUnselectedLabel,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: 
+                      AppTextStyles.button.copyWith(
+                        color: selected ? AppColors.navbarSelectedLabel : AppColors.navbarUnselectedLabel,
+                      ),
                   ),
                 ),
               ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/controllers/summary_controller.dart';
 import 'package:pomodoro_timer/models/timer_model.dart';
 import 'package:pomodoro_timer/services/notification_service.dart';
-import 'package:pomodoro_timer/utils/custom_colors.dart';
+import 'package:pomodoro_timer/theme/app_colors.dart';
 import 'package:pomodoro_timer/widgets/custom_timer_dialog.dart';
 import 'package:pomodoro_timer/widgets/summary_card_group.dart';
 import 'package:pomodoro_timer/widgets/timer_buttons.dart';
@@ -106,7 +106,7 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.backgroundBlue,
+      backgroundColor: AppColors.backgroundBlue,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),

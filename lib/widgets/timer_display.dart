@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pomodoro_timer/utils/custom_colors.dart';
+import 'package:pomodoro_timer/theme/app_colors.dart';
 import 'package:pomodoro_timer/utils/time_utils.dart';
 
 class TimerDisplay extends StatefulWidget {
@@ -52,8 +52,8 @@ class _TimerDisplayState extends State<TimerDisplay> {
               child: CircularProgressIndicator(
                 value: value,
                 strokeWidth: 12,
-                backgroundColor: CustomColors.progressPurpleBG,
-                valueColor: const AlwaysStoppedAnimation(CustomColors.progressPurpleValue),
+                backgroundColor: AppColors.progressPurpleBG,
+                valueColor: const AlwaysStoppedAnimation(AppColors.progressPurpleValue),
               ),
             ),
           ),
@@ -67,7 +67,7 @@ class _TimerDisplayState extends State<TimerDisplay> {
               IconButton(
                 onPressed: widget.onSettingsPressed,
                 icon: const Icon(Icons.settings),
-                color: CustomColors.buttonPurpleBG,
+                color: AppColors.buttonPurpleBG,
               ),
             ],
           ),
