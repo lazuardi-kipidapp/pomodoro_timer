@@ -41,7 +41,7 @@ class NavPills extends StatelessWidget {
                   child: Text(
                     label,
                     style: 
-                      AppTextStyles.button.copyWith(
+                      AppTextStyles.navPillItem.copyWith(
                         color: selected ? AppColors.navbarSelectedLabel : AppColors.navbarUnselectedLabel,
                       ),
                   ),

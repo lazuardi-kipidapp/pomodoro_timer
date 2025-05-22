@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/controllers/summary_controller.dart';
+import 'package:pomodoro_timer/theme/app_button_styles.dart';
 import 'package:pomodoro_timer/theme/app_colors.dart';
+import 'package:pomodoro_timer/theme/app_text_styles.dart';
 import 'package:pomodoro_timer/utils/time_utils.dart';
 
 class SummaryCardGroup extends StatefulWidget {
@@ -50,7 +52,7 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
             color: AppColors.tagBlueBG,
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+          child: Text(title, style: AppTextStyles.tag),
         ),
         const SizedBox(height: 12),
         Row(
@@ -77,9 +79,9 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text(value, style: AppTextStyles.regular),
           const SizedBox(height: 4),
-          Text(label, style: const TextStyle(fontSize: 16)),
+          Text(label, style: AppTextStyles.secondaryRegular),
         ],
       ),
     );
@@ -87,15 +89,10 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
 
   Widget _buildResetButton(String label, VoidCallback onPressed) {
     return ElevatedButton.icon(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.buttonPurpleBG,
-        foregroundColor: AppColors.buttonPurpleLabel,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      ),
+      style: AppButtonStyles.regular,
       onPressed: onPressed,
-      icon: const Icon(Icons.refresh),
-      label: Text(label),
+      icon: const Icon(Icons.refresh, color: AppColors.buttonPurpleLabel),
+      label: Text(label, style: AppTextStyles.button),
     );
   }
 

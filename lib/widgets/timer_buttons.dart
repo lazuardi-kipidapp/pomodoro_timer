@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pomodoro_timer/theme/app_button_styles.dart';
 import 'package:pomodoro_timer/theme/app_colors.dart';
 import 'package:pomodoro_timer/constants/strings.dart';
+import 'package:pomodoro_timer/theme/app_text_styles.dart';
 
 class TimerButtons extends StatelessWidget {
   final bool isRunning;
@@ -33,14 +35,9 @@ class TimerButtons extends StatelessWidget {
   Widget _buildControlButton(IconData icon, String label, VoidCallback onTap) {
     return ElevatedButton.icon(
       onPressed: onTap,
-      icon: Icon(icon),
-      label: Text(label),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.buttonPurpleBG,
-        foregroundColor: AppColors.buttonPurpleLabel,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      ),
+      icon: Icon(icon, color: AppColors.buttonPurpleLabel,),
+      label: Text(label, style: AppTextStyles.button),
+      style: AppButtonStyles.regular,
     );
   }
 }

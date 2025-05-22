@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/theme/app_colors.dart';
+import 'package:pomodoro_timer/theme/app_text_styles.dart';
 import 'package:pomodoro_timer/utils/time_utils.dart';
 
 class TimerDisplay extends StatefulWidget {
@@ -62,7 +63,7 @@ class _TimerDisplayState extends State<TimerDisplay> {
             children: [
               Text(
                 TimeUtils.formatDurationFromSeconds(widget.timeInSeconds),
-                style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                style: AppTextStyles.bigText,
               ),
               IconButton(
                 onPressed: widget.onSettingsPressed,

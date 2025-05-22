@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pomodoro_timer/theme/app_button_styles.dart';
 import 'package:pomodoro_timer/theme/app_colors.dart';
 import 'package:pomodoro_timer/controllers/summary_controller.dart';
+import 'package:pomodoro_timer/theme/app_text_styles.dart';
 import 'package:pomodoro_timer/widgets/summary_card_group.dart';
 
 class SummaryScreen extends StatefulWidget {
@@ -28,15 +30,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   Widget _buildResetAllButton() {
     return ElevatedButton.icon(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.buttonPurpleBG,
-        foregroundColor: AppColors.buttonPurpleLabel,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      ),
+      style: AppButtonStyles.regular,
       onPressed: _resetAll,
-      icon: const Icon(Icons.refresh),
-      label: const Text("Reset All"),
+      icon: const Icon(Icons.refresh, color: AppColors.buttonPurpleLabel,),
+      label: const Text("Reset All", style: AppTextStyles.button,),
     );
   }
 
