@@ -8,4 +8,10 @@ class AppButtonStyles {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
   );
+  static final secondary = ElevatedButton.styleFrom(
+    backgroundColor: AppColors.buttonGrayBG,
+    foregroundColor: AppColors.buttonGrayLabel,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  );
 }

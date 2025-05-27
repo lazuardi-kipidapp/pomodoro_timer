@@ -107,47 +107,50 @@ class _TimerScreenState extends State<TimerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundBlue,
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-
-              // Mode Switcher
-              NavPills(
-                isWorkMode: isWorkMode,
-                onTap: (bool value) {
-                  setState(() {
-                    isWorkMode = value;
-                    // ubah mode dan state lainnya
-                  });
-                },
-              ),
-          
-              const SizedBox(height: 30),
-          
-              // Circular Timer Display
-              TimerDisplay(
-                timeInSeconds: timerModel.remainingTime,
-                totalDuration: isWorkMode ? timerModel.workDuration : timerModel.breakDuration,
-                onSettingsPressed: _showCustomTimerDialog),
-          
-              const SizedBox(height: 30),
-          
-              // Control Buttons
-              TimerButtons(
-                isRunning: isRunning,
-                onStart: _startTimer,
-                onStop: _stopTimer,
-                onReset: _resetTimer,
-              ),
-          
-              const SizedBox(height: 36),
-          
-              // Today Summary Card Group
-              const SummaryCardGroup('daily'),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+            
+                // Mode Switcher
+                NavPills(
+                  isWorkMode: isWorkMode,
+                  onTap: (bool value) {
+                    setState(() {
+                      isWorkMode = value;
+                      // ubah mode dan state lainnya
+                    });
+                  },
+                ),
+            
+                const SizedBox(height: 30),
+            
+                // Circular Timer Display
+                TimerDisplay(
+                  timeInSeconds: timerModel.remainingTime,
+                  totalDuration: isWorkMode ? timerModel.workDuration : timerModel.breakDuration,
+                  onSettingsPressed: _showCustomTimerDialog),
+            
+                const SizedBox(height: 30),
+            
+                // Control Buttons
+                TimerButtons(
+                  isRunning: isRunning,
+                  onStart: _startTimer,
+                  onStop: _stopTimer,
+                  onReset: _resetTimer,
+                ),
+            
+                const SizedBox(height: 36),
+            
+                // Today Summary Card Group
+                const SummaryCardGroup('daily'),
+              ],
+            ),
           ),
         ),
       ),
