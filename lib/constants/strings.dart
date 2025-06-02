@@ -3,4 +3,5 @@ class Strings {
   static const String start = 'Start';
   static const String pause = 'Pause';
   static const String reset = 'Reset';
+  static const String resume = 'Resume';
 }

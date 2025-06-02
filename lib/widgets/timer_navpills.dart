@@ -3,12 +3,12 @@ import 'package:pomodoro_timer/theme/app_colors.dart';
 import 'package:pomodoro_timer/theme/app_text_styles.dart';
 
 class NavPills extends StatelessWidget {
-  final bool isWorkMode;
+  final bool isWorkSession;
   final Function(bool) onTap;
 
   const NavPills({
     super.key,
-    required this.isWorkMode,
+    required this.isWorkSession,
     required this.onTap,
   });
 
@@ -23,7 +23,7 @@ class NavPills extends StatelessWidget {
         children: ['Work', 'Break'].asMap().entries.map((entry) {
           final index = entry.key;
           final label = entry.value;
-          final selected = (index == 0 && isWorkMode) || (index == 1 && !isWorkMode);
+          final selected = (index == 0 && isWorkSession) || (index == 1 && !isWorkSession);
 
           return Expanded(
             child: GestureDetector(

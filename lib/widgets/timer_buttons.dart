@@ -6,6 +6,7 @@ import 'package:pomodoro_timer/theme/app_text_styles.dart';
 
 class TimerButtons extends StatelessWidget {
   final bool isRunning;
+  final bool isResumable;
   final VoidCallback onStart;
   final VoidCallback onStop;
   final VoidCallback onReset;
@@ -13,6 +14,7 @@ class TimerButtons extends StatelessWidget {
   const TimerButtons({
     super.key,
     required this.isRunning,
+    required this.isResumable,
     required this.onStart,
     required this.onStop,
     required this.onReset,
@@ -23,11 +25,13 @@ class TimerButtons extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        isRunning ? 
-        _buildControlButton(Icons.pause, Strings.pause, onStop) :
-        _buildControlButton(Icons.play_arrow, Strings.start, onStart),
-        const SizedBox(width: 20),
-        _buildControlButton(Icons.stop, Strings.reset, onReset),
+        if (isRunning)...[
+          _buildControlButton(Icons.pause, Strings.pause, onStop),
+          const SizedBox(width: 20),
+          _buildControlButton(Icons.stop, Strings.reset, onReset),
+        ] else ...[
+          _buildControlButton(Icons.play_arrow, isResumable? Strings.resume : Strings.start, onStart),
+        ],
       ],
     );
   }

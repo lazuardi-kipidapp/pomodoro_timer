@@ -19,10 +19,9 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-  bool isWorkMode = true;
-
   late TimerModel timerModel;
   bool isRunning = false;
+  bool isResumable = false;
   Timer? timer;
   final NotificationService _notificationService = NotificationService();
   String selectedMode = 'Work';
@@ -41,7 +40,10 @@ class _TimerScreenState extends State<TimerScreen> {
   }
 
   void _startTimer() {
-    setState(() => isRunning = true);
+    setState(() {
+      isRunning = true;
+      isResumable = true;
+    });
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timerModel.remainingTime > 0) {
         setState(() => timerModel.remainingTime--);
@@ -59,7 +61,10 @@ class _TimerScreenState extends State<TimerScreen> {
 
 
   void _stopTimer() {
-    setState(() => isRunning = false);
+    setState(() {
+      isRunning = false; 
+      isResumable = false;
+    });
     timer?.cancel();
   }
 
@@ -118,13 +123,15 @@ class _TimerScreenState extends State<TimerScreen> {
             
                 // Mode Switcher
                 NavPills(
-                  isWorkMode: isWorkMode,
                   onTap: (bool value) {
                     setState(() {
-                      isWorkMode = value;
-                      // ubah mode dan state lainnya
+                      _stopTimer();
+                      timerModel.isWorkSession = value;
+                      timerModel.remainingTime = timerModel.isWorkSession
+                      ? timerModel.workDuration
+                      : timerModel.breakDuration;
                     });
-                  },
+                  }, isWorkSession: timerModel.isWorkSession,
                 ),
             
                 const SizedBox(height: 30),
@@ -132,7 +139,7 @@ class _TimerScreenState extends State<TimerScreen> {
                 // Circular Timer Display
                 TimerDisplay(
                   timeInSeconds: timerModel.remainingTime,
-                  totalDuration: isWorkMode ? timerModel.workDuration : timerModel.breakDuration,
+                  totalDuration: timerModel.isWorkSession ? timerModel.workDuration : timerModel.breakDuration,
                   onSettingsPressed: _showCustomTimerDialog),
             
                 const SizedBox(height: 30),
@@ -140,6 +147,7 @@ class _TimerScreenState extends State<TimerScreen> {
                 // Control Buttons
                 TimerButtons(
                   isRunning: isRunning,
+                  isResumable: isResumable,
                   onStart: _startTimer,
                   onStop: _stopTimer,
                   onReset: _resetTimer,
