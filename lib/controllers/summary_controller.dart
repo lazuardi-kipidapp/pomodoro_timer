@@ -9,11 +9,11 @@ class SummaryController {
     _checkAndResetDailySummary();
   }
 
-  static void recordWorkSession(int minutes) {
+  static void recordWorkSession(int seconds) {
     _increment('daily_sessions');
-    _increment('daily_time', minutes);
+    _increment('daily_time', seconds);
     _increment('weekly_sessions');
-    _increment('weekly_time', minutes);
+    _increment('weekly_time', seconds);
   }
 
   static Map<String, Map<String, dynamic>> getSummary() {

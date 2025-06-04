@@ -25,6 +25,8 @@ class _TimerScreenState extends State<TimerScreen> {
   Timer? timer;
   final NotificationService _notificationService = NotificationService();
   String selectedMode = 'Work';
+
+  Key summaryKey = UniqueKey();
   
   @override
   void initState() {
@@ -51,8 +53,11 @@ class _TimerScreenState extends State<TimerScreen> {
         _notificationService.showNotification(timerModel.isWorkSession);
         if (timerModel.isWorkSession) {
           final workedSeconds = timerModel.workDuration;
-          final workedMinutes = (workedSeconds / 60).floor(); // atau round()
-          SummaryController.recordWorkSession(workedMinutes);
+          SummaryController.recordWorkSession(workedSeconds);
+
+          setState(() {
+            summaryKey = UniqueKey(); // Force rebuild SummaryCardGroup
+          });
         }
         _switchSession();
       }
@@ -156,7 +161,7 @@ class _TimerScreenState extends State<TimerScreen> {
                 const SizedBox(height: 36),
             
                 // Today Summary Card Group
-                const SummaryCardGroup('daily'),
+                SummaryCardGroup('daily', key: summaryKey),
               ],
             ),
           ),

@@ -21,7 +21,20 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
   @override
   void initState() {
     super.initState();
+    _loadData();
+  }
+
+  // Tambahkan method ini untuk load data
+  void _loadData() {
     data = SummaryController.getSummary()[widget.type]!;
+  }
+
+  // Override didUpdateWidget untuk refresh data ketika widget di-rebuild
+  @override
+  void didUpdateWidget(SummaryCardGroup oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Refresh data setiap kali widget di-update (karena key berubah)
+    _loadData();
   }
 
   void _reset() {
@@ -32,7 +45,7 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
     }
 
     setState(() {
-      data = SummaryController.getSummary()[widget.type]!;
+      _loadData(); // Gunakan method _loadData
     });
 
     if (widget.onResetOverride != null) {
@@ -95,5 +108,4 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
       label: Text(label, style: AppTextStyles.button),
     );
   }
-
 }
