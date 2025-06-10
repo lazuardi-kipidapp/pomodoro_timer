@@ -4,9 +4,12 @@ import 'package:intl/intl.dart';
 class SummaryController {
   static late SharedPreferences _prefs;
 
+  // init() sekarang akan memanggil pengecekan harian dan mingguan
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
+    // Pengecekan dilakukan secara berurutan
     _checkAndResetDailySummary();
+    _checkAndResetWeeklySummary(); // <-- Tambahan baru
   }
 
   static void recordWorkSession(int seconds) {
@@ -65,6 +68,33 @@ class SummaryController {
       resetDailySummary();
     }
   }
+
+  // --- METHOD BARU UNTUK LOGIKA MINGGUAN ---
+  static void _checkAndResetWeeklySummary() {
+    DateTime today = DateTime.now();
+    
+    // Hitung tanggal hari Senin pada minggu ini.
+    // Properti `weekday` mengembalikan 1 untuk Senin, 2 untuk Selasa, ..., 7 untuk Minggu.
+    // Jadi, kita kurangi tanggal hari ini dengan (hari_ke_berapa - 1) hari.
+    // Contoh: jika hari ini Rabu (weekday = 3), Senin adalah 3 - 1 = 2 hari yang lalu.
+    DateTime startOfCurrentWeek = today.subtract(Duration(days: today.weekday - 1));
+    
+    // Format tanggal Senin menjadi string untuk disimpan dan dibandingkan
+    String startOfCurrentWeekStr = DateFormat('yyyy-MM-dd').format(startOfCurrentWeek);
+    
+    // Ambil tanggal Senin dari minggu terakhir aplikasi dibuka
+    String startOfLastWeekStr = _prefs.getString('start_of_last_week') ?? '';
+
+    // Jika tanggal Senin minggu ini berbeda dengan yang tersimpan,
+    // berarti ini adalah minggu baru.
+    if (startOfCurrentWeekStr != startOfLastWeekStr) {
+      // Simpan tanggal Senin minggu ini sebagai penanda baru
+      _prefs.setString('start_of_last_week', startOfCurrentWeekStr);
+      // Reset data mingguan
+      resetWeeklySummary();
+    }
+  }
+  // ------------------------------------------
 
   static void _increment(String key, [int value = 1]) {
     int current = _prefs.getInt(key) ?? 0;
