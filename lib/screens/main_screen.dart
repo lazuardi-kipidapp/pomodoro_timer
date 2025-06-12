@@ -1,4 +1,7 @@
+// main_screen.dart - Updated version
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:pomodoro_timer/providers/timer_provider.dart';
 import 'package:pomodoro_timer/screens/timer_screen.dart';
 import 'package:pomodoro_timer/screens/summary_screen.dart';
 import 'package:pomodoro_timer/theme/app_colors.dart';
@@ -32,9 +35,9 @@ class _MainScreenState extends State<MainScreen> {
   }) {
     return Expanded(
       child: Material(
-        color: _selectedIndex == index 
-          ? AppColors.navbarSelectedBG 
-          : AppColors.navbarUnselectedBG,
+        color: _selectedIndex == index
+           ? AppColors.navbarSelectedBG
+           : AppColors.navbarUnselectedBG,
         child: InkWell(
           onTap: () => _onItemTapped(index),
           splashColor: Colors.white10,
@@ -48,16 +51,41 @@ class _MainScreenState extends State<MainScreen> {
                 SizedBox(height: 5),
                 Padding(
                   padding: EdgeInsets.all(4),
-                  child: SizedBox(
-                    width: 28,
-                    height: 28,
-                    child: Icon(
-                      icon,
-                      size: 24,
-                      color: _selectedIndex == index
-                          ? AppColors.navbarSelectedLabel
-                          : AppColors.navbarUnselectedLabel,
-                    ),
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        width: 28,
+                        height: 28,
+                        child: Icon(
+                          icon,
+                          size: 24,
+                          color: _selectedIndex == index
+                              ? AppColors.navbarSelectedLabel
+                              : AppColors.navbarUnselectedLabel,
+                        ),
+                      ),
+                      // Timer indicator - hanya tampil di tab Timer
+                      if (index == 0)
+                        Consumer<TimerProvider>(
+                          builder: (context, timerProvider, child) {
+                            if (timerProvider.isRunning) {
+                              return Positioned(
+                                right: 0,
+                                top: 0,
+                                child: Container(
+                                  width: 8,
+                                  height: 8,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              );
+                            }
+                            return SizedBox();
+                          },
+                        ),
+                    ],
                   ),
                 ),
                 Text(
@@ -76,8 +104,6 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -109,18 +135,18 @@ class _MainScreenState extends State<MainScreen> {
               ],
             ),
           ),
-
+          
           // Animasi highlight
           Positioned(
             top: 0,
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 300), // Perpanjang durasi
-              curve: Curves.easeInOut, // Biar smooth
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
               height: 5,
-              width: MediaQuery.of(context).size.width / 2, // Lebar item navbar
+              width: MediaQuery.of(context).size.width / 2,
               margin: EdgeInsets.only(
                 left: (MediaQuery.of(context).size.width / 2) * _selectedIndex,
-              ), // Geser highlight ke posisi yang dipilih
+              ),
               decoration: BoxDecoration(
                 color: AppColors.navbarSelectedHighlight
               ),
@@ -128,8 +154,6 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
       ),
-
-
     );
   }
 }

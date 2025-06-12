@@ -1,9 +1,7 @@
-import 'dart:async';
-
+// timer_screen.dart - Updated version
 import 'package:flutter/material.dart';
-import 'package:pomodoro_timer/controllers/summary_controller.dart';
-import 'package:pomodoro_timer/models/timer_model.dart';
-import 'package:pomodoro_timer/services/notification_service.dart';
+import 'package:provider/provider.dart';
+import 'package:pomodoro_timer/providers/timer_provider.dart';
 import 'package:pomodoro_timer/theme/app_colors.dart';
 import 'package:pomodoro_timer/widgets/custom_timer_dialog.dart';
 import 'package:pomodoro_timer/widgets/summary_card_group.dart';
@@ -19,97 +17,24 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-  late TimerModel timerModel;
-  bool isRunning = false;
-  bool isResumable = false;
-  Timer? timer;
-  final NotificationService _notificationService = NotificationService();
-  String selectedMode = 'Work';
-
   Key summaryKey = UniqueKey();
-  
-  @override
-  void initState() {
-    super.initState();
-    Map<String, int> settings = SummaryController.getTimerSettings();
-    timerModel = TimerModel(
-      workDuration: settings['work_duration']!,
-      breakDuration: settings['break_duration']!,
-      remainingTime: settings['work_duration']!,
-      isWorkSession: true,
-    );
-    _notificationService.initializeNotifications();
-  }
-
-  void _startTimer() {
-    setState(() {
-      isRunning = true;
-      isResumable = true;
-    });
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (timerModel.remainingTime > 0) {
-        setState(() => timerModel.remainingTime--);
-      } else {
-        _notificationService.showNotification(timerModel.isWorkSession);
-        if (timerModel.isWorkSession) {
-          final workedSeconds = timerModel.workDuration;
-          SummaryController.recordWorkSession(workedSeconds);
-
-          setState(() {
-            summaryKey = UniqueKey(); // Force rebuild SummaryCardGroup
-          });
-        }
-        _switchSession();
-      }
-    });
-  }
-
-
-  void _stopTimer() {
-    setState(() {
-      isRunning = false; 
-      isResumable = false;
-    });
-    timer?.cancel();
-  }
-
-  void _resetTimer() {
-    _stopTimer();
-    setState(() {
-      timerModel.remainingTime = timerModel.isWorkSession ? timerModel.workDuration : timerModel.breakDuration;
-    });
-  }
-
-  void _changeMode(String newMode) {
-    setState(() {
-      selectedMode = newMode;
-      timerModel.isWorkSession = selectedMode == 'Work';
-      timerModel.remainingTime = timerModel.isWorkSession
-          ? timerModel.workDuration
-          : timerModel.breakDuration;
-    });
-  }
-
-  void _switchSession() {
-    _stopTimer();
-    _changeMode(timerModel.isWorkSession ? 'Break' : 'Work');
-  }
 
   void _showCustomTimerDialog() async {
+    final timerProvider = context.read<TimerProvider>();
+    
     final result = await showDialog<Map<String, int>>(
       context: context,
       builder: (context) => CustomTimerDialog(
-        initialWorkDuration: timerModel.workDuration,
-        initialBreakDuration: timerModel.breakDuration,
+        initialWorkDuration: timerProvider.timerModel.workDuration,
+        initialBreakDuration: timerProvider.timerModel.breakDuration,
       ),
     );
+    
     if (result != null) {
+      timerProvider.updateTimerSettings(result['work']!, result['break']!);
       setState(() {
-        timerModel.workDuration = result['work']!;
-        timerModel.breakDuration = result['break']!;
-        timerModel.remainingTime = timerModel.workDuration;
+        summaryKey = UniqueKey(); // Force rebuild SummaryCardGroup
       });
-      SummaryController.saveTimerSettings(timerModel.workDuration, timerModel.breakDuration);
     }
   }
 
@@ -122,53 +47,54 @@ class _TimerScreenState extends State<TimerScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-            
-                // Mode Switcher
-                NavPills(
-                  onTap: (bool value) {
-                    setState(() {
-                      _stopTimer();
-                      timerModel.isWorkSession = value;
-                      timerModel.remainingTime = timerModel.isWorkSession
-                      ? timerModel.workDuration
-                      : timerModel.breakDuration;
-                    });
-                  }, isWorkSession: timerModel.isWorkSession,
-                ),
-            
-                const SizedBox(height: 30),
-            
-                // Circular Timer Display
-                TimerDisplay(
-                  timeInSeconds: timerModel.remainingTime,
-                  totalDuration: timerModel.isWorkSession ? timerModel.workDuration : timerModel.breakDuration,
-                  onSettingsPressed: _showCustomTimerDialog),
-            
-                const SizedBox(height: 30),
-            
-                // Control Buttons
-                TimerButtons(
-                  isRunning: isRunning,
-                  isResumable: isResumable,
-                  onStart: _startTimer,
-                  onStop: _stopTimer,
-                  onReset: _resetTimer,
-                ),
-            
-                const SizedBox(height: 36),
-            
-                // Today Summary Card Group
-                SummaryCardGroup('daily', key: summaryKey),
-              ],
+            child: Consumer<TimerProvider>(
+              builder: (context, timerProvider, child) {
+                return Column(
+                  children: [
+                    const SizedBox(height: 20),
+                
+                    // Mode Switcher
+                    NavPills(
+                      onTap: (bool value) {
+                        timerProvider.stopTimer();
+                        timerProvider.changeMode(value ? 'Work' : 'Break');
+                      },
+                      isWorkSession: timerProvider.timerModel.isWorkSession,
+                    ),
+                
+                    const SizedBox(height: 30),
+                
+                    // Circular Timer Display
+                    TimerDisplay(
+                      timeInSeconds: timerProvider.timerModel.remainingTime,
+                      totalDuration: timerProvider.timerModel.isWorkSession 
+                          ? timerProvider.timerModel.workDuration 
+                          : timerProvider.timerModel.breakDuration,
+                      onSettingsPressed: _showCustomTimerDialog,
+                    ),
+                
+                    const SizedBox(height: 30),
+                
+                    // Control Buttons
+                    TimerButtons(
+                      isRunning: timerProvider.isRunning,
+                      isResumable: timerProvider.isResumable,
+                      onStart: timerProvider.startTimer,
+                      onStop: timerProvider.stopTimer,
+                      onReset: timerProvider.resetTimer,
+                    ),
+                
+                    const SizedBox(height: 36),
+                
+                    // Today Summary Card Group
+                    SummaryCardGroup('daily', key: summaryKey),
+                  ],
+                );
+              },
             ),
           ),
         ),
       ),
     );
   }
-
-  
 }
