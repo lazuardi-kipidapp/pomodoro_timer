@@ -2,8 +2,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/controllers/summary_controller.dart';
+import 'package:pomodoro_timer/main.dart';
 import 'package:pomodoro_timer/models/timer_model.dart';
+import 'package:pomodoro_timer/providers/summary_provider.dart';
 import 'package:pomodoro_timer/services/notification_service.dart';
+import 'package:provider/provider.dart';
 
 class TimerProvider extends ChangeNotifier {
   late TimerModel _timerModel;
@@ -48,7 +51,14 @@ class TimerProvider extends ChangeNotifier {
         if (_timerModel.isWorkSession) {
           final workedSeconds = _timerModel.workDuration;
           SummaryController.recordWorkSession(workedSeconds);
+          
+          // Refresh summary provider
+          if (navigatorKey.currentContext != null) {
+            final context = navigatorKey.currentContext!;
+            context.read<SummaryProvider>().refresh();
+          }
         }
+
         _switchSession();
       }
     });

@@ -1,61 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_timer/controllers/summary_controller.dart';
+import 'package:pomodoro_timer/providers/summary_provider.dart';
 import 'package:pomodoro_timer/theme/app_button_styles.dart';
 import 'package:pomodoro_timer/theme/app_colors.dart';
 import 'package:pomodoro_timer/theme/app_text_styles.dart';
 import 'package:pomodoro_timer/utils/time_utils.dart';
+import 'package:provider/provider.dart';
 
-class SummaryCardGroup extends StatefulWidget {
+class SummaryCardGroup extends StatelessWidget {
   final String type; // 'daily' or 'weekly'
   final VoidCallback? onResetOverride;
 
   const SummaryCardGroup(this.type, {super.key, this.onResetOverride});
 
-  @override
-  State<SummaryCardGroup> createState() => _SummaryCardGroupState();
-}
+  void _reset(BuildContext context) {
+    final provider = context.read<SummaryProvider>();
 
-class _SummaryCardGroupState extends State<SummaryCardGroup> {
-  late Map<String, dynamic> data;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadData();
-  }
-
-  // Tambahkan method ini untuk load data
-  void _loadData() {
-    data = SummaryController.getSummary()[widget.type]!;
-  }
-
-  // Override didUpdateWidget untuk refresh data ketika widget di-rebuild
-  @override
-  void didUpdateWidget(SummaryCardGroup oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Refresh data setiap kali widget di-update (karena key berubah)
-    _loadData();
-  }
-
-  void _reset() {
-    if (widget.type == 'daily') {
-      SummaryController.resetDailySummary();
+    if (type == 'daily') {
+      provider.resetDaily();
     } else {
-      SummaryController.resetWeeklySummary();
+      provider.resetWeekly();
     }
 
-    setState(() {
-      _loadData(); // Gunakan method _loadData
-    });
-
-    if (widget.onResetOverride != null) {
-      widget.onResetOverride!();
+    if (onResetOverride != null) {
+      onResetOverride!();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    String title = widget.type == 'daily' ? 'Today' : 'This Week';
+    final summary = context.watch<SummaryProvider>().summary;
+    final data = summary[type]!;
+    final title = type == 'daily' ? 'Today' : 'This Week';
 
     return Column(
       children: [
@@ -76,7 +52,7 @@ class _SummaryCardGroupState extends State<SummaryCardGroup> {
           ],
         ),
         const SizedBox(height: 12),
-        _buildResetButton("Reset", _reset),
+        _buildResetButton("Reset", () => _reset(context)),
       ],
     );
   }
