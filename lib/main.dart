@@ -5,6 +5,7 @@ import 'package:pomodoro_timer/providers/timer_provider.dart';
 import 'package:pomodoro_timer/screens/main_screen.dart';
 import 'package:pomodoro_timer/controllers/summary_controller.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:pomodoro_timer/screens/splash_screen.dart';
 import 'package:pomodoro_timer/services/notification_service.dart';
 import 'package:pomodoro_timer/theme/app_colors.dart';
 import 'package:provider/provider.dart';
@@ -68,7 +69,7 @@ class PomodoroTimerApp extends StatelessWidget {
             displaySmall: TextStyle(fontSize: 22,fontWeight: FontWeight.w700),
           ),
         ),
-      home: MainScreen(),
+      home: SplashScreen(),
     ),
     );
   }
